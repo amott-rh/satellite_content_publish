@@ -1,0 +1,9 @@
+[satellite]
+satellite.example.com
+
+[satellite:vars]
+org="My Organization`"
+user="admin"
+password="MySecretPassword"
+server="https://satellite.example.com"
+today="{{ ansible_date_time.date }}"
