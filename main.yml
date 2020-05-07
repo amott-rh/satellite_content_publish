@@ -2,7 +2,7 @@
 - hosts: satellite
   
   collections:
-   - theforeman.foreman
+    - theforeman.foreman
 
   vars:
     updated_repo_ids: []
