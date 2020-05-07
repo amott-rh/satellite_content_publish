@@ -1,4 +1,7 @@
 ---
+# This is the original monolithic playbook.
+# It has now been split into smaller plays - pleasee use main.yml
+
 - hosts: satellite
   
   collections:
