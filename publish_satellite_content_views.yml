@@ -1,0 +1,34 @@
+---
+- hosts: satellite
+  
+  collections:
+   - theforeman.foreman
+
+  vars:
+    updated_repo_ids: []
+    updated_repo_names: []
+    updated_content_view_ids: []
+    updated_content_view_names: []
+    updated_composite_view_ids: []
+    updated_composite_view_names: []
+    content_views_for_publishing: []
+    published_views: []
+    
+  tasks:
+    - include_tasks: gather_sync_tasks.yml
+
+    - include_tasks: select_content_views.yml
+
+    - include_tasks: select_composite_content_views.yml
+
+    - include_tasks: collate_content_views.yml
+
+    - include_tasks: publish_content_views.yml
+
+    - debug:
+        msg:
+          - "Updated repos: {{ updated_repo_names }}"
+          - "Content views with updated repos: {{ updated_content_view_names }}"
+          - "Composite content views with updated repos: {{ updated_composite_view_names }}"
+          - "Content views to update: {{ content_views_for_publishing }}"
+          - "Content views that will be published: {{ published_views }}"

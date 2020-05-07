@@ -1,0 +1,20 @@
+---
+- name: get task info for all sync tasks that finished today
+  foreman_search_facts:
+    username: "{{ user }}"
+    password: "{{ password }}"
+    server_url: "{{ server }}"
+    organization: "{{ org }}"
+    validate_certs: no
+    resource: foreman_tasks
+    search: action ~ Synchronize and result = success and ended_at = today
+  register: synced_tasks_details
+
+- name: create a list of repository ids for updated repos
+  set_fact:
+    updated_repo_ids: "{{ updated_repo_ids + [ item.input.repository.id ] }}"
+    updated_repo_names: "{{ updated_repo_names + [ item.input.repository.name ] }}"
+  when: item.input.contents_changed == true
+  loop: "{{ synced_tasks_details.resources }}"
+  loop_control:
+    label: "{{ item.action }}"

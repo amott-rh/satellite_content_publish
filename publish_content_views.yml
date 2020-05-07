@@ -1,0 +1,12 @@
+---
+- name: Publish content views and promote to Library. Not idempotent
+  katello_content_view_version:
+    username: "{{ user }}"
+    password: "{{ password }}"
+    server_url: "{{ server }}"
+    organization: "{{ org }}"
+    validate_certs: false
+    content_view: "{{ item }}"
+    lifecycle_environments:
+      - Library
+  loop: "{{ published_views }}"

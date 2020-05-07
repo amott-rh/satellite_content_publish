@@ -1,0 +1,24 @@
+---
+- name: get details for all content views
+  foreman_search_facts:
+    username: "{{ user }}"
+    password: "{{ password }}"
+    server_url: "{{ server }}"
+    organization: "{{ org }}"
+    validate_certs: no
+    resource: content_views
+  register: content_view_details
+
+- name: find content views which contain updated repos
+  set_fact:
+    updated_content_view_ids: "{{ updated_content_view_ids + [ item.1.id ] }}"
+    updated_content_view_names: "{{ updated_content_view_names + [ item.1.name ] }}"
+  when: item.0 | int in item.1.repository_ids
+  loop: "{{ updated_repo_ids | product(content_view_details.resources) | list }}"
+  loop_control:
+    label: "{{ item.1.id }}" 
+
+- name: remove duplicate entries from content view IDs
+  set_fact:
+    updated_content_view_ids: "{{ updated_content_view_ids | unique }}"
+    updated_content_view_names: "{{ updated_content_view_names | unique }}"
